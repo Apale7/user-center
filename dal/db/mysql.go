@@ -1,0 +1,58 @@
+package db
+
+import (
+	"fmt"
+	"user_center/model"
+
+	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	db_model "user_center/dal/db/model"
+)
+
+const (
+	// "user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
+	base = "%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local"
+)
+
+var (
+	db  *gorm.DB
+	err error
+)
+
+func init() {
+	//获取dbconf
+	viper.SetConfigName("db_conf")
+	viper.AddConfigPath("./config")
+	if err = viper.ReadInConfig(); err != nil {
+		log.Error(errors.WithStack(err))
+		panic("viper readInConfig error")
+	}
+	var dbconf model.Conf
+	if err = viper.Unmarshal(&dbconf); err != nil {
+		log.Error(errors.WithStack(err))
+		panic("viper Unmarshal error")
+	}
+	mysqlConf := dbconf.Mysql
+
+	// dsn := fmt.Sprintf(base)
+	dsn := fmt.Sprintf(base, mysqlConf.Username, mysqlConf.Password, mysqlConf.Host, mysqlConf.Port, mysqlConf.Dbname)
+	//连接
+	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{SkipDefaultTransaction: true})
+	if err != nil {
+		panic(err)
+	}
+	log.Info("mysql连接成功")
+	if !db.Migrator().HasTable(&db_model.User{}) {
+		db.Migrator().CreateTable(&db_model.User{})
+	}
+	if !db.Migrator().HasTable(&db_model.UserExtra{}) {
+		db.Migrator().CreateTable(&db_model.UserExtra{})
+	}
+}
+
+func GetDb() *gorm.DB {
+	return db
+}
