@@ -1,4 +1,9 @@
-if [ ! -d output ]; then
-    mkdir output
-fi
-go build -o output/user_center.out
+#!/usr/bin/env bash
+NAME="user_center"
+
+mkdir -p output/bin output/config
+cp -r config/ output/config/
+
+go build -o output/bin/${NAME}
+chmod +x output/bin/${NAME}
+chmod +x output/start.sh
