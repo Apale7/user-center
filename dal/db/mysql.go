@@ -24,8 +24,27 @@ var (
 
 func init() {
 	//获取dbconf
+	mysqlConf := getDbConf()
+	//构造dsn
+	dsn := fmt.Sprintf(base, mysqlConf.Username, mysqlConf.Password, mysqlConf.Host, mysqlConf.Port, mysqlConf.Dbname)
+	//连接
+	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{SkipDefaultTransaction: true})
+	if err != nil {
+		panic(err)
+	}
+	log.Info("mysql连接成功")
+	//建表
+	if !db.Migrator().HasTable(&db_model.User{}) {
+		db.Migrator().CreateTable(&db_model.User{})
+	}
+	if !db.Migrator().HasTable(&db_model.UserExtra{}) {
+		db.Migrator().CreateTable(&db_model.UserExtra{})
+	}
+}
+
+func getDbConf() model.Mysql {
 	viper.SetConfigName("db_conf")
-	viper.AddConfigPath("./config")
+	viper.AddConfigPath("../../config")
 	if err = viper.ReadInConfig(); err != nil {
 		log.Error(errors.WithStack(err))
 		panic("viper readInConfig error")
@@ -35,22 +54,7 @@ func init() {
 		log.Error(errors.WithStack(err))
 		panic("viper Unmarshal error")
 	}
-	mysqlConf := dbconf.Mysql
-
-	// dsn := fmt.Sprintf(base)
-	dsn := fmt.Sprintf(base, mysqlConf.Username, mysqlConf.Password, mysqlConf.Host, mysqlConf.Port, mysqlConf.Dbname)
-	//连接
-	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{SkipDefaultTransaction: true})
-	if err != nil {
-		panic(err)
-	}
-	log.Info("mysql连接成功")
-	if !db.Migrator().HasTable(&db_model.User{}) {
-		db.Migrator().CreateTable(&db_model.User{})
-	}
-	if !db.Migrator().HasTable(&db_model.UserExtra{}) {
-		db.Migrator().CreateTable(&db_model.UserExtra{})
-	}
+	return dbconf.Mysql
 }
 
 func GetDb() *gorm.DB {
