@@ -28,5 +28,6 @@ func main() {
 	}
 	server := grpc.NewServer()
 	h.RegisterUserCenterServer(server, &UserCenterServer{})
+	logrus.Infof("server listen at %s", lis.Addr().String())
 	server.Serve(lis)
 }
