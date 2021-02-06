@@ -28,7 +28,7 @@ func init() {
 	//构造dsn
 	dsn := fmt.Sprintf(base, mysqlConf.Username, mysqlConf.Password, mysqlConf.Host, mysqlConf.Port, mysqlConf.Dbname)
 	//连接
-	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{SkipDefaultTransaction: true})
+	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{SkipDefaultTransaction: true})//关闭默认事务提高性能
 	if err != nil {
 		panic(err)
 	}
