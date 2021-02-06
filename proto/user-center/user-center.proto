@@ -2,7 +2,6 @@ syntax = "proto3";
 package user_center;
 
 import "proto/base/base.proto";
-
 message User
 {
     int32 id = 1;
@@ -44,17 +43,18 @@ message LoginRequest
 
 message LoginResponse
 {
-    int32 id = 1;
+    int32 session_id = 1;
 
     base.BaseResp base_resp = 255;
 }
 
-message LogoutRequest
+//删除账户
+message DeleteRequest
 {
     int32 id = 1;
 }
 
-message LogoutResponse
+message DeleteResponse
 {
     base.BaseResp base_resp = 255;
 }
@@ -62,6 +62,6 @@ message LogoutResponse
 service UserCenter
 {
     rpc Register(RegisterRequest) returns(RegisterResponse) {}
-    rpc Login(RegisterRequest) returns (LoginResponse) {}
-    rpc Logout(LogoutRequest) returns (LogoutResponse) {}
+    rpc Login(LoginRequest) returns (LoginResponse) {}
+    rpc Delete(DeleteRequest) returns (DeleteResponse) {}
 }

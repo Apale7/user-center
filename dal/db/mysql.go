@@ -44,7 +44,7 @@ func init() {
 
 func getDbConf() model.Mysql {
 	viper.SetConfigName("db_conf")
-	viper.AddConfigPath("../../config")
+	viper.AddConfigPath("./config")
 	if err = viper.ReadInConfig(); err != nil {
 		log.Error(errors.WithStack(err))
 		panic("viper readInConfig error")
@@ -55,8 +55,4 @@ func getDbConf() model.Mysql {
 		panic("viper Unmarshal error")
 	}
 	return dbconf.Mysql
-}
-
-func GetDb() *gorm.DB {
-	return db
 }
