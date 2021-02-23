@@ -9,22 +9,13 @@ import (
 	"gorm.io/gorm"
 )
 
-func Login(ctx context.Context, user model.User) (res model.User, err error) {
-	err = db.WithContext(ctx).Order("username").Where(user).Take(&res).Error
+func GetUser(ctx context.Context, username string) (res model.User, err error) {
+	err = db.WithContext(ctx).Order("username").Where("username = ?", username).Take(&res).Error
 	return
 }
 
-func Register(ctx context.Context, user model.User, extra model.UserExtra) (err error) {
+func CreateUserWithExtra(ctx context.Context, user model.User, extra model.UserExtra) (err error) {
 	err = db.WithContext(ctx).Transaction(func(tx *gorm.DB) (err error) {
-		if err = tx.Create(&extra).Error; err != nil {
-			err = ex_errors.Errorf("Create userExtra error: %v", err)
-			return
-		}
-		logrus.Infof("Create UserExtra: %+v", extra)
-		if extra.ID <= 0 {
-			return errors.New("id is 0")
-		}
-		user.UserExtraID = extra.ID
 		result := tx.FirstOrCreate(&user)
 		if err = result.Error; err != nil {
 			err = ex_errors.Errorf("Create user error: %v", err)
@@ -34,6 +25,20 @@ func Register(ctx context.Context, user model.User, extra model.UserExtra) (err 
 			err = ex_errors.New("用户名已存在")
 			return
 		}
+		if user.ID == 0 {
+			return errors.New("user_id is 0")
+		}
+		logrus.Infof("Create User: %+v", user)
+		extra.UserID = user.ID
+		if err = tx.Create(&extra).Error; err != nil {
+			err = ex_errors.Errorf("Create userExtra error: %v", err)
+			return
+		}
+		logrus.Infof("Create UserExtra: %+v", extra)
+		if extra.ID <= 0 {
+			return errors.New("user_extra_id is 0")
+		}
+		
 		return
 	})
 	if err != nil {
