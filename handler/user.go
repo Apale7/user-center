@@ -19,7 +19,7 @@ func Register(ctx context.Context, req *user_center.RegisterRequest) (resp *user
 }
 
 func Login(ctx context.Context, req *user_center.LoginRequest) (resp *user_center.LoginResponse, err error) {
-	user, err := db.GetUser(ctx, req.Username)
+	user, err := db.GetUser(ctx, model.User{Username: req.Username})
 	if err != nil {
 		return
 	}

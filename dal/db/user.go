@@ -2,15 +2,15 @@ package db
 
 import (
 	"context"
-	"user_center/dal/db/model"
 	"errors"
-	ex_errors"github.com/pkg/errors"
+	ex_errors "github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
+	"user_center/dal/db/model"
 )
 
-func GetUser(ctx context.Context, username string) (res model.User, err error) {
-	err = db.WithContext(ctx).Order("username").Where("username = ?", username).Take(&res).Error
+func GetUser(ctx context.Context, user model.User) (res model.User, err error) {
+	err = db.WithContext(ctx).Order("username").Where(&user).Take(&res).Error
 	return
 }
 
@@ -21,7 +21,7 @@ func CreateUserWithExtra(ctx context.Context, user model.User, extra model.UserE
 			err = ex_errors.Errorf("Create user error: %v", err)
 			return
 		}
-		if result.RowsAffected == 0 {//插入条数为0，用户名冲突
+		if result.RowsAffected == 0 { //插入条数为0，用户名冲突
 			err = ex_errors.New("用户名已存在")
 			return
 		}
@@ -38,7 +38,7 @@ func CreateUserWithExtra(ctx context.Context, user model.User, extra model.UserE
 		if extra.ID <= 0 {
 			return errors.New("user_extra_id is 0")
 		}
-		
+
 		return
 	})
 	if err != nil {

@@ -80,11 +80,13 @@ func (UnimplementedUserCenterServer) Login(context.Context, *LoginRequest) (*Log
 func (UnimplementedUserCenterServer) Delete(context.Context, *DeleteRequest) (*DeleteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
+func (UnimplementedUserCenterServer) mustEmbedUnimplementedUserCenterServer() {}
 
 // UnsafeUserCenterServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to UserCenterServer will
 // result in compilation errors.
 type UnsafeUserCenterServer interface {
+	mustEmbedUnimplementedUserCenterServer()
 }
 
 func RegisterUserCenterServer(s grpc.ServiceRegistrar, srv UserCenterServer) {

@@ -43,7 +43,7 @@ message LoginRequest
 
 message LoginResponse
 {
-    int32 session_id = 1;
+    string token = 1;
 
     base.BaseResp base_resp = 255;
 }

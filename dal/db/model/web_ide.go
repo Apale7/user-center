@@ -59,8 +59,8 @@ var RoleColumns = struct {
 // RoleResource [...]
 type RoleResource struct {
 	gorm.Model
-	RoleID     int `gorm:"index:idx_user_id"` // role表的id
-	ResourceID int // resource表的id
+	RoleID     uint `gorm:"index:idx_user_id"` // role表的id
+	ResourceID uint // resource表的id
 }
 
 // TableName get sql table name.获取数据库表名
@@ -117,8 +117,8 @@ var UserColumns = struct {
 // UserContainer [...]
 type UserContainer struct {
 	gorm.Model
-	UserID      int `gorm:"index:idx_user_id"` // user表的id
-	ContainerID int // docker中的container_id
+	UserID      uint   `gorm:"index:idx_user_id"` // user表的id
+	ContainerID string // docker中的container_id
 }
 
 // TableName get sql table name.获取数据库表名
@@ -146,7 +146,7 @@ var UserContainerColumns = struct {
 // UserExtra [...]
 type UserExtra struct {
 	gorm.Model
-	UserID      int    `gorm:"unique"` // user表的id
+	UserID      uint   `gorm:"unique"` // user表的id
 	Nickname    string // 昵称
 	PhoneNumber string // 电话号码
 	Email       string // 邮箱
@@ -184,8 +184,8 @@ var UserExtraColumns = struct {
 // UserImage [...]
 type UserImage struct {
 	gorm.Model
-	UserID  int `gorm:"index:idx_user_id"` // user表的id
-	ImageID int // docker中的image_id
+	UserID  uint   `gorm:"index:idx_user_id"` // user表的id
+	ImageID string // docker中的image_id
 }
 
 // TableName get sql table name.获取数据库表名
@@ -213,8 +213,8 @@ var UserImageColumns = struct {
 // UserRole [...]
 type UserRole struct {
 	gorm.Model
-	UserID int `gorm:"index:idx_user_id"` // user表的id
-	RoleID int // role表的id
+	UserID uint `gorm:"index:idx_user_id"` // user表的id
+	RoleID uint // role表的id
 }
 
 // TableName get sql table name.获取数据库表名
