@@ -2,11 +2,16 @@ package service
 
 import (
 	"fmt"
+	"os"
 	"time"
 	db_model "user_center/dal/db/model"
 	"user_center/model"
 
+	"github.com/Apale7/common/constdef"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 )
 
 const (
@@ -14,8 +19,28 @@ const (
 )
 
 var (
-	secret = "123456"
+	secret string
 )
+
+func init() {
+
+	secret = getJWTConf()
+	logrus.Info(secret)
+	if os.Getenv("ENV") == "dev" {
+		secret = "123456"
+	}
+}
+
+func getJWTConf() string {
+	viper.SetConfigName("jwt_conf")
+	viper.AddConfigPath("./config")
+	if err := viper.ReadInConfig(); err != nil {
+		logrus.Error(errors.WithStack(err))
+		panic("viper readInConfig error")
+	}
+
+	return viper.GetString(constdef.UserCenterSecretKey)
+}
 
 func CreateToken(userID uint, userExtra db_model.UserExtra) (tokenString string, err error) {
 	customClaims := model.CustomClaims{

@@ -5,7 +5,7 @@ NAME="user_center"
 # do protoc --go_out=plugins=grpc,paths=source_relative:. $x; done
 find ./ -name "*.go" | xargs gofmt -w -s -l
 mkdir -p output/bin output/config
-cp -r config/ output/config/
+cp -r config/ output/
 
 go build -o output/bin/${NAME}.out
 chmod +x output/bin/${NAME}.out

@@ -29,3 +29,7 @@ func initClient() (err error) {
 	}
 	return nil
 }
+
+func GetRedisClient() *redis.Client {
+	return redisClient
+}
