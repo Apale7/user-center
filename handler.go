@@ -18,16 +18,16 @@ func (*UserCenterServer) Register(ctx context.Context, req *h.RegisterRequest) (
 	return handler.Register(ctx, req)
 }
 
-func (*UserCenterServer) Login(context.Context, *h.LoginRequest) (*h.LoginResponse, error) {
+func (*UserCenterServer) Login(ctx context.Context, req *h.LoginRequest) (*h.LoginResponse, error) {
 	fmt.Println("Login called")
-	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+	return handler.Login(ctx, req)
 }
 
-func (*UserCenterServer) Delete(context.Context, *h.DeleteRequest) (*h.DeleteResponse, error) {
+func (*UserCenterServer) Delete(ctx context.Context, req *h.DeleteRequest) (*h.DeleteResponse, error) {
 	fmt.Println("Delete called")
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 
-func (*UserCenterServer) CheckToken(context.Context, *h.CheckTokenRequest) (*h.CheckTokenResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CheckToken not implemented")
+func (*UserCenterServer) CheckToken(ctx context.Context, req *h.CheckTokenRequest) (*h.CheckTokenResponse, error) {
+	return handler.CheckToken(ctx, req)
 }
