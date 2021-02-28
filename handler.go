@@ -28,4 +28,6 @@ func (*UserCenterServer) Delete(context.Context, *h.DeleteRequest) (*h.DeleteRes
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 
-func (*UserCenterServer) mustEmbedUnimplementedUserCenterServer() {}
+func (*UserCenterServer) CheckToken(context.Context, *h.CheckTokenRequest) (*h.CheckTokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckToken not implemented")
+}

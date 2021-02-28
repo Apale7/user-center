@@ -10,9 +10,9 @@ import (
 	proto "github.com/golang/protobuf/proto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	base "user_center/proto/base"
 	reflect "reflect"
 	sync "sync"
-	base "user_center/proto/base"
 )
 
 const (
@@ -499,6 +499,108 @@ func (x *DeleteResponse) GetBaseResp() *base.BaseResp {
 	return nil
 }
 
+type CheckTokenRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Token string     `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+	Base  *base.Base `protobuf:"bytes,255,opt,name=base,proto3" json:"base,omitempty"`
+}
+
+func (x *CheckTokenRequest) Reset() {
+	*x = CheckTokenRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_user_center_user_center_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CheckTokenRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CheckTokenRequest) ProtoMessage() {}
+
+func (x *CheckTokenRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_user_center_user_center_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CheckTokenRequest.ProtoReflect.Descriptor instead.
+func (*CheckTokenRequest) Descriptor() ([]byte, []int) {
+	return file_proto_user_center_user_center_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *CheckTokenRequest) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+func (x *CheckTokenRequest) GetBase() *base.Base {
+	if x != nil {
+		return x.Base
+	}
+	return nil
+}
+
+type CheckTokenResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	BaseResp *base.BaseResp `protobuf:"bytes,255,opt,name=base_resp,json=baseResp,proto3" json:"base_resp,omitempty"`
+}
+
+func (x *CheckTokenResponse) Reset() {
+	*x = CheckTokenResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_user_center_user_center_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CheckTokenResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CheckTokenResponse) ProtoMessage() {}
+
+func (x *CheckTokenResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_user_center_user_center_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CheckTokenResponse.ProtoReflect.Descriptor instead.
+func (*CheckTokenResponse) Descriptor() ([]byte, []int) {
+	return file_proto_user_center_user_center_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *CheckTokenResponse) GetBaseResp() *base.BaseResp {
+	if x != nil {
+		return x.BaseResp
+	}
+	return nil
+}
+
 var File_proto_user_center_user_center_proto protoreflect.FileDescriptor
 
 var file_proto_user_center_user_center_proto_rawDesc = []byte{
@@ -553,7 +655,16 @@ var file_proto_user_center_user_center_proto_rawDesc = []byte{
 	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2c, 0x0a, 0x09, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x72, 0x65,
 	0x73, 0x70, 0x18, 0xff, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x62, 0x61, 0x73, 0x65,
 	0x2e, 0x42, 0x61, 0x73, 0x65, 0x52, 0x65, 0x73, 0x70, 0x52, 0x08, 0x62, 0x61, 0x73, 0x65, 0x52,
-	0x65, 0x73, 0x70, 0x32, 0xde, 0x01, 0x0a, 0x0a, 0x55, 0x73, 0x65, 0x72, 0x43, 0x65, 0x6e, 0x74,
+	0x65, 0x73, 0x70, 0x22, 0x4a, 0x0a, 0x11, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x54, 0x6f, 0x6b, 0x65,
+	0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x6f, 0x6b, 0x65,
+	0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x12, 0x1f,
+	0x0a, 0x04, 0x62, 0x61, 0x73, 0x65, 0x18, 0xff, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0a, 0x2e,
+	0x62, 0x61, 0x73, 0x65, 0x2e, 0x42, 0x61, 0x73, 0x65, 0x52, 0x04, 0x62, 0x61, 0x73, 0x65, 0x22,
+	0x42, 0x0a, 0x12, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2c, 0x0a, 0x09, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x72, 0x65,
+	0x73, 0x70, 0x18, 0xff, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x62, 0x61, 0x73, 0x65,
+	0x2e, 0x42, 0x61, 0x73, 0x65, 0x52, 0x65, 0x73, 0x70, 0x52, 0x08, 0x62, 0x61, 0x73, 0x65, 0x52,
+	0x65, 0x73, 0x70, 0x32, 0xaf, 0x02, 0x0a, 0x0a, 0x55, 0x73, 0x65, 0x72, 0x43, 0x65, 0x6e, 0x74,
 	0x65, 0x72, 0x12, 0x49, 0x0a, 0x08, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x12, 0x1c,
 	0x2e, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x63, 0x65, 0x6e, 0x74, 0x65, 0x72, 0x2e, 0x52, 0x65, 0x67,
 	0x69, 0x73, 0x74, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x75,
@@ -567,7 +678,12 @@ var file_proto_user_center_user_center_proto_rawDesc = []byte{
 	0x5f, 0x63, 0x65, 0x6e, 0x74, 0x65, 0x72, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x52, 0x65,
 	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x63, 0x65, 0x6e,
 	0x74, 0x65, 0x72, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0x00, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x73, 0x65, 0x22, 0x00, 0x12, 0x4f, 0x0a, 0x0a, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x54, 0x6f, 0x6b,
+	0x65, 0x6e, 0x12, 0x1e, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x63, 0x65, 0x6e, 0x74, 0x65, 0x72,
+	0x2e, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x1f, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x63, 0x65, 0x6e, 0x74, 0x65, 0x72,
+	0x2e, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x22, 0x00, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -582,38 +698,44 @@ func file_proto_user_center_user_center_proto_rawDescGZIP() []byte {
 	return file_proto_user_center_user_center_proto_rawDescData
 }
 
-var file_proto_user_center_user_center_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_proto_user_center_user_center_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_proto_user_center_user_center_proto_goTypes = []interface{}{
-	(*User)(nil),             // 0: user_center.User
-	(*UserExtra)(nil),        // 1: user_center.UserExtra
-	(*RegisterRequest)(nil),  // 2: user_center.RegisterRequest
-	(*RegisterResponse)(nil), // 3: user_center.RegisterResponse
-	(*LoginRequest)(nil),     // 4: user_center.LoginRequest
-	(*LoginResponse)(nil),    // 5: user_center.LoginResponse
-	(*DeleteRequest)(nil),    // 6: user_center.DeleteRequest
-	(*DeleteResponse)(nil),   // 7: user_center.DeleteResponse
-	(*base.Base)(nil),        // 8: base.Base
-	(*base.BaseResp)(nil),    // 9: base.BaseResp
+	(*User)(nil),               // 0: user_center.User
+	(*UserExtra)(nil),          // 1: user_center.UserExtra
+	(*RegisterRequest)(nil),    // 2: user_center.RegisterRequest
+	(*RegisterResponse)(nil),   // 3: user_center.RegisterResponse
+	(*LoginRequest)(nil),       // 4: user_center.LoginRequest
+	(*LoginResponse)(nil),      // 5: user_center.LoginResponse
+	(*DeleteRequest)(nil),      // 6: user_center.DeleteRequest
+	(*DeleteResponse)(nil),     // 7: user_center.DeleteResponse
+	(*CheckTokenRequest)(nil),  // 8: user_center.CheckTokenRequest
+	(*CheckTokenResponse)(nil), // 9: user_center.CheckTokenResponse
+	(*base.Base)(nil),          // 10: base.Base
+	(*base.BaseResp)(nil),      // 11: base.BaseResp
 }
 var file_proto_user_center_user_center_proto_depIdxs = []int32{
 	0,  // 0: user_center.RegisterRequest.user:type_name -> user_center.User
 	1,  // 1: user_center.RegisterRequest.user_extra:type_name -> user_center.UserExtra
-	8,  // 2: user_center.RegisterRequest.base:type_name -> base.Base
-	9,  // 3: user_center.RegisterResponse.base_resp:type_name -> base.BaseResp
-	8,  // 4: user_center.LoginRequest.base:type_name -> base.Base
-	9,  // 5: user_center.LoginResponse.base_resp:type_name -> base.BaseResp
-	9,  // 6: user_center.DeleteResponse.base_resp:type_name -> base.BaseResp
-	2,  // 7: user_center.UserCenter.Register:input_type -> user_center.RegisterRequest
-	4,  // 8: user_center.UserCenter.Login:input_type -> user_center.LoginRequest
-	6,  // 9: user_center.UserCenter.Delete:input_type -> user_center.DeleteRequest
-	3,  // 10: user_center.UserCenter.Register:output_type -> user_center.RegisterResponse
-	5,  // 11: user_center.UserCenter.Login:output_type -> user_center.LoginResponse
-	7,  // 12: user_center.UserCenter.Delete:output_type -> user_center.DeleteResponse
-	10, // [10:13] is the sub-list for method output_type
-	7,  // [7:10] is the sub-list for method input_type
-	7,  // [7:7] is the sub-list for extension type_name
-	7,  // [7:7] is the sub-list for extension extendee
-	0,  // [0:7] is the sub-list for field type_name
+	10, // 2: user_center.RegisterRequest.base:type_name -> base.Base
+	11, // 3: user_center.RegisterResponse.base_resp:type_name -> base.BaseResp
+	10, // 4: user_center.LoginRequest.base:type_name -> base.Base
+	11, // 5: user_center.LoginResponse.base_resp:type_name -> base.BaseResp
+	11, // 6: user_center.DeleteResponse.base_resp:type_name -> base.BaseResp
+	10, // 7: user_center.CheckTokenRequest.base:type_name -> base.Base
+	11, // 8: user_center.CheckTokenResponse.base_resp:type_name -> base.BaseResp
+	2,  // 9: user_center.UserCenter.Register:input_type -> user_center.RegisterRequest
+	4,  // 10: user_center.UserCenter.Login:input_type -> user_center.LoginRequest
+	6,  // 11: user_center.UserCenter.Delete:input_type -> user_center.DeleteRequest
+	8,  // 12: user_center.UserCenter.CheckToken:input_type -> user_center.CheckTokenRequest
+	3,  // 13: user_center.UserCenter.Register:output_type -> user_center.RegisterResponse
+	5,  // 14: user_center.UserCenter.Login:output_type -> user_center.LoginResponse
+	7,  // 15: user_center.UserCenter.Delete:output_type -> user_center.DeleteResponse
+	9,  // 16: user_center.UserCenter.CheckToken:output_type -> user_center.CheckTokenResponse
+	13, // [13:17] is the sub-list for method output_type
+	9,  // [9:13] is the sub-list for method input_type
+	9,  // [9:9] is the sub-list for extension type_name
+	9,  // [9:9] is the sub-list for extension extendee
+	0,  // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_proto_user_center_user_center_proto_init() }
@@ -718,6 +840,30 @@ func file_proto_user_center_user_center_proto_init() {
 				return nil
 			}
 		}
+		file_proto_user_center_user_center_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CheckTokenRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_user_center_user_center_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CheckTokenResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -725,7 +871,7 @@ func file_proto_user_center_user_center_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_proto_user_center_user_center_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

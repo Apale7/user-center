@@ -11,10 +11,13 @@ import (
 
 const (
 	maxAge = 60 * 60 * 24 * 7
-	
 )
 
-func CreateToken(userID uint, userExtra db_model.UserExtra, secret string) (tokenString string, err error) {
+var (
+	secret = "123456"
+)
+
+func CreateToken(userID uint, userExtra db_model.UserExtra) (tokenString string, err error) {
 	customClaims := model.CustomClaims{
 		UserID: userID,
 		Extra:  userExtra,
@@ -24,7 +27,7 @@ func CreateToken(userID uint, userExtra db_model.UserExtra, secret string) (toke
 		},
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodRS256, customClaims)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, customClaims)
 	tokenString, err = token.SignedString([]byte(secret))
 	if err != nil {
 		return
@@ -32,16 +35,20 @@ func CreateToken(userID uint, userExtra db_model.UserExtra, secret string) (toke
 	return
 }
 
-func ParseToken(tokenString string, secret string) (model.CustomClaims, error) {
+func ParseToken(tokenString string) (model.CustomClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &model.CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
 		return []byte(secret), nil
 	})
+	if err != nil {
+		return model.CustomClaims{}, err
+	}
 	if claims, ok := token.Claims.(model.CustomClaims); ok && token.Valid {
 		return claims, nil
 	} else {
+		fmt.Printf("%+v", claims)
 		return model.CustomClaims{}, err
 	}
 }

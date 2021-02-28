@@ -25,12 +25,15 @@ func init() {
 	mysqlConf := getDbConf()
 	//构造dsn
 	dsn := fmt.Sprintf(base, mysqlConf.Username, mysqlConf.Password, mysqlConf.Host, mysqlConf.Port, mysqlConf.Dbname)
+	// log.Infoln(dsn)
 	//连接
 	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{SkipDefaultTransaction: true}) //关闭默认事务提高性能
 	if err != nil {
 		panic(err)
 	}
+	db = db.Debug()
 	log.Info("mysql连接成功")
+	// db.AutoMigrate(&model.User{}, &model.UserExtra{}, &model.Resource{}, &model.Role{}, &model.UserContainer{}, &model.UserImage{}, &model.RoleResource{}, &model.UserRole{})
 }
 
 func getDbConf() mysqlConf {

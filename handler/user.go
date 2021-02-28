@@ -2,11 +2,15 @@ package handler
 
 import (
 	"context"
-	"errors"
 	"user_center/dal/db"
 	"user_center/dal/db/model"
 	"user_center/dto"
+	"user_center/proto/base"
 	user_center "user_center/proto/user-center"
+	"user_center/service"
+
+	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
 func Register(ctx context.Context, req *user_center.RegisterRequest) (resp *user_center.RegisterResponse, err error) {
@@ -27,10 +31,27 @@ func Login(ctx context.Context, req *user_center.LoginRequest) (resp *user_cente
 	if user.Password != req.Password {
 		return nil, errors.New("用户名或密码错误")
 	}
-	resp = &user_center.LoginResponse{}
+	extra, err := db.GetUserExtra(ctx, user)
+	if err != nil {
+		return
+	}
+
+	token, err := service.CreateToken(user.ID, extra)
+	if err != nil {
+		return nil, errors.Errorf("create token error, err: %+v", err)
+	}
+	resp = &user_center.LoginResponse{Token: token}
 	return
 }
 
-func getToken(user model.User) {
-	
+func CheckToken(ctx context.Context, req *user_center.CheckTokenRequest) (resp *user_center.CheckTokenResponse, err error) {
+	claims, err := service.ParseToken(req.Token)
+	if err != nil {
+		return
+	}
+	logrus.Infof("%s access", claims.Extra.Nickname)
+	resp = &user_center.CheckTokenResponse{
+		BaseResp: &base.BaseResp{StatusCode: 0},
+	}
+	return
 }
