@@ -36,11 +36,15 @@ func Login(ctx context.Context, req *user_center.LoginRequest) (resp *user_cente
 		return
 	}
 
-	token, err := service.CreateToken(user.ID, extra)
+	accessToken, err := service.CreateAccessToken(user.ID, extra)
 	if err != nil {
-		return nil, errors.Errorf("create token error, err: %+v", err)
+		return nil, errors.Errorf("create accessToken error, err: %+v", err)
 	}
-	resp = &user_center.LoginResponse{Token: token}
+	refreshToken, err := service.CreateRefreshToken(user.ID, extra)
+	if err != nil {
+		return nil, errors.Errorf("create refreshToken error, err: %+v", err)
+	}
+	resp = &user_center.LoginResponse{AccessToken: accessToken, RefreshToken: refreshToken}
 	return
 }
 

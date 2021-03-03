@@ -10,7 +10,7 @@ import (
 var ctx = context.Background()
 
 func TestParseService(t *testing.T) {
-	token, _ := CreateToken(123456, model.UserExtra{})
+	token, _ := CreateAccessToken(123456, model.UserExtra{})
 	fmt.Println(token)
 
 	if res, err := ParseToken(token); err != nil {

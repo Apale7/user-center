@@ -15,7 +15,8 @@ import (
 )
 
 const (
-	maxAge = 60 * 60 * 24 * 7
+	accessMaxAge  = 60
+	refreshMaxAge = 60 * 60 * 24 * 7
 )
 
 var (
@@ -42,12 +43,13 @@ func getJWTConf() string {
 	return viper.GetString(constdef.UserCenterSecretKey)
 }
 
-func CreateToken(userID uint, userExtra db_model.UserExtra) (tokenString string, err error) {
+// createToken create token with uid and extra, expires after timeLength seconds.
+func createToken(userID uint, userExtra db_model.UserExtra, timeLength int) (tokenString string, err error) {
 	customClaims := model.CustomClaims{
 		UserID: userID,
 		Extra:  userExtra,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Duration(maxAge) * time.Second).Unix(),
+			ExpiresAt: time.Now().Add(time.Duration(timeLength) * time.Second).Unix(),
 			Issuer:    "user_center",
 		},
 	}
@@ -58,6 +60,14 @@ func CreateToken(userID uint, userExtra db_model.UserExtra) (tokenString string,
 		return
 	}
 	return
+}
+
+func CreateAccessToken(userID uint, userExtra db_model.UserExtra) (tokenString string, err error) {
+	return createToken(userID, userExtra, accessMaxAge)
+}
+
+func CreateRefreshToken(userID uint, userExtra db_model.UserExtra) (tokenString string, err error) {
+	return createToken(userID, userExtra, refreshMaxAge)
 }
 
 func ParseToken(tokenString string) (model.CustomClaims, error) {
