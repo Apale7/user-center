@@ -17,6 +17,8 @@ github.com/Apale7/common v0.0.0-20210228073616-d8e760cd1eb2 h1:ph6pmG9HtbdvzwJDQ
 github.com/Apale7/common v0.0.0-20210228073616-d8e760cd1eb2/go.mod h1:S+Smwc54DU2qjEmNU+tcKJumw4MOIQUu6kO8d9G3Hls=
 github.com/Apale7/common v0.0.0-20210228074756-1ed4ed8e0530 h1:msycRyXZslu8SktR+9BYUmESX7tH5bnIWVPLod7deME=
 github.com/Apale7/common v0.0.0-20210228074756-1ed4ed8e0530/go.mod h1:S+Smwc54DU2qjEmNU+tcKJumw4MOIQUu6kO8d9G3Hls=
+github.com/Apale7/common v0.0.0-20210228081448-ed0e6f253949 h1:5agRVk/no/D2KGTbSXSmWnSMXlZuGPvB2RovKy7E6MU=
+github.com/Apale7/common v0.0.0-20210228081448-ed0e6f253949/go.mod h1:U9mTGlvOSPNPoFuFIwDTK/J3VJ46T1LY561sFuV9pjg=
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
