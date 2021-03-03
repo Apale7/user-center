@@ -59,3 +59,21 @@ func CheckToken(ctx context.Context, req *user_center.CheckTokenRequest) (resp *
 	}
 	return
 }
+
+func Refresh(ctx context.Context, req *user_center.RefreshRequest) (resp *user_center.RefreshResponse, err error) {
+	claims, err := service.ParseToken(req.RefreshToken)
+	if err != nil {
+		return
+	}
+	logrus.Infof("%s refresh", claims.Extra.Nickname)
+	accessToken, err := service.CreateAccessToken(claims.UserID, claims.Extra)
+	if err != nil {
+		return nil, errors.Errorf("create accessToken error, err: %+v", err)
+	}
+	refreshToken, err := service.CreateRefreshToken(claims.UserID, claims.Extra)
+	if err != nil {
+		return nil, errors.Errorf("create refreshToken error, err: %+v", err)
+	}
+	resp = &user_center.RefreshResponse{AccessToken: accessToken, RefreshToken: refreshToken}
+	return
+}

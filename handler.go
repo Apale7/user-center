@@ -31,3 +31,7 @@ func (*UserCenterServer) Delete(ctx context.Context, req *h.DeleteRequest) (*h.D
 func (*UserCenterServer) CheckToken(ctx context.Context, req *h.CheckTokenRequest) (*h.CheckTokenResponse, error) {
 	return handler.CheckToken(ctx, req)
 }
+
+func (*UserCenterServer) Refresh(ctx context.Context, req *h.RefreshRequest) (*h.RefreshResponse, error) {
+	return handler.Refresh(ctx, req)
+}

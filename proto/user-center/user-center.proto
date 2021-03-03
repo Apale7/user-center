@@ -82,10 +82,24 @@ message CheckTokenResponse {
     base.BaseResp base_resp = 255;
 }
 
+message RefreshRequest {
+    string refresh_token = 1;
+
+    base.Base base = 255;
+}
+
+message RefreshResponse {
+    string access_token = 1;
+    string refresh_token = 2;
+
+    base.BaseResp base_resp = 255;
+}
+
 service UserCenter
 {
     rpc Register(RegisterRequest) returns(RegisterResponse) {}
     rpc Login(LoginRequest) returns (LoginResponse) {}
     rpc Delete(DeleteRequest) returns (DeleteResponse) {}
     rpc CheckToken(CheckTokenRequest) returns (CheckTokenResponse) {}
+    rpc Refresh(RefreshRequest) returns (RefreshResponse) {}
 }
