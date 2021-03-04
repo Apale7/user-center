@@ -46,6 +46,8 @@ message LoginResponse
 {
     string access_token = 1;
     string refresh_token = 2;
+    int64 access_exp = 3;
+    int64 refresh_exp = 4;
 
     base.BaseResp base_resp = 255;
 }
@@ -91,7 +93,9 @@ message RefreshRequest {
 message RefreshResponse {
     string access_token = 1;
     string refresh_token = 2;
-
+    int64 access_exp = 3;
+    int64 refresh_exp = 4;
+    
     base.BaseResp base_resp = 255;
 }
 

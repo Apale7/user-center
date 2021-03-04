@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	accessMaxAge  = 60
+	accessMaxAge  = 30
 	refreshMaxAge = 60 * 60 * 24 * 7
 )
 
@@ -44,7 +44,7 @@ func getJWTConf() string {
 }
 
 // createToken create token with uid and extra, expires after timeLength seconds.
-func createToken(userID uint, userExtra db_model.UserExtra, timeLength int) (tokenString string, err error) {
+func createToken(userID uint, userExtra db_model.UserExtra, timeLength int) (tokenString string, exp int64, err error) {
 	customClaims := model.CustomClaims{
 		UserID: userID,
 		Extra:  userExtra,
@@ -53,7 +53,7 @@ func createToken(userID uint, userExtra db_model.UserExtra, timeLength int) (tok
 			Issuer:    "user_center",
 		},
 	}
-
+	exp = customClaims.ExpiresAt
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, customClaims)
 	tokenString, err = token.SignedString([]byte(secret))
 	if err != nil {
@@ -62,11 +62,11 @@ func createToken(userID uint, userExtra db_model.UserExtra, timeLength int) (tok
 	return
 }
 
-func CreateAccessToken(userID uint, userExtra db_model.UserExtra) (tokenString string, err error) {
+func CreateAccessToken(userID uint, userExtra db_model.UserExtra) (tokenString string, exp int64, err error) {
 	return createToken(userID, userExtra, accessMaxAge)
 }
 
-func CreateRefreshToken(userID uint, userExtra db_model.UserExtra) (tokenString string, err error) {
+func CreateRefreshToken(userID uint, userExtra db_model.UserExtra) (tokenString string, exp int64, err error) {
 	return createToken(userID, userExtra, refreshMaxAge)
 }
 

@@ -36,21 +36,22 @@ func Login(ctx context.Context, req *user_center.LoginRequest) (resp *user_cente
 		return
 	}
 
-	accessToken, err := service.CreateAccessToken(user.ID, extra)
+	accessToken, accessExp, err := service.CreateAccessToken(user.ID, extra)
 	if err != nil {
 		return nil, errors.Errorf("create accessToken error, err: %+v", err)
 	}
-	refreshToken, err := service.CreateRefreshToken(user.ID, extra)
+	refreshToken, refreshExp, err := service.CreateRefreshToken(user.ID, extra)
 	if err != nil {
 		return nil, errors.Errorf("create refreshToken error, err: %+v", err)
 	}
-	resp = &user_center.LoginResponse{AccessToken: accessToken, RefreshToken: refreshToken}
+	resp = &user_center.LoginResponse{AccessToken: accessToken, RefreshToken: refreshToken, AccessExp: accessExp, RefreshExp: refreshExp}
 	return
 }
 
 func CheckToken(ctx context.Context, req *user_center.CheckTokenRequest) (resp *user_center.CheckTokenResponse, err error) {
 	claims, err := service.ParseToken(req.Token)
 	if err != nil {
+		logrus.Errorln(err)
 		return
 	}
 	logrus.Infof("%s access", claims.Extra.Nickname)
@@ -66,14 +67,14 @@ func Refresh(ctx context.Context, req *user_center.RefreshRequest) (resp *user_c
 		return
 	}
 	logrus.Infof("%s refresh", claims.Extra.Nickname)
-	accessToken, err := service.CreateAccessToken(claims.UserID, claims.Extra)
+	accessToken, accessExp, err := service.CreateAccessToken(claims.UserID, claims.Extra)
 	if err != nil {
 		return nil, errors.Errorf("create accessToken error, err: %+v", err)
 	}
-	refreshToken, err := service.CreateRefreshToken(claims.UserID, claims.Extra)
+	refreshToken, refreshExp, err := service.CreateRefreshToken(claims.UserID, claims.Extra)
 	if err != nil {
 		return nil, errors.Errorf("create refreshToken error, err: %+v", err)
 	}
-	resp = &user_center.RefreshResponse{AccessToken: accessToken, RefreshToken: refreshToken}
+	resp = &user_center.RefreshResponse{AccessToken: accessToken, RefreshToken: refreshToken, AccessExp: accessExp, RefreshExp: refreshExp}
 	return
 }
