@@ -2,12 +2,15 @@ package db
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/schema"
 )
 
 const (
@@ -27,7 +30,11 @@ func init() {
 	dsn := fmt.Sprintf(base, mysqlConf.Username, mysqlConf.Password, mysqlConf.Host, mysqlConf.Port, mysqlConf.Dbname)
 	// log.Infoln(dsn)
 	//连接
-	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{SkipDefaultTransaction: true}) //关闭默认事务提高性能
+	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{SkipDefaultTransaction: true,
+		NamingStrategy: schema.NamingStrategy{
+			// TablePrefix:   "gormv2_",
+			SingularTable: true,
+		}}) //关闭默认事务提高性能
 	if err != nil {
 		panic(err)
 	}
@@ -39,6 +46,10 @@ func init() {
 func getDbConf() mysqlConf {
 	viper.SetConfigName("db_conf")
 	viper.AddConfigPath("./config")
+	if os.Getenv("ENV") == "dev" {
+		logrus.Infoln("running in dev environment...")
+		viper.AddConfigPath("/root/Code/user-center/config")
+	}
 	if err = viper.ReadInConfig(); err != nil {
 		log.Error(errors.WithStack(err))
 		panic("viper readInConfig error")

@@ -9,10 +9,10 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var ctx = context.Background()
+var userCtx = context.Background()
 
 func TestGetUser(t *testing.T) {
-	user, err := GetUser(ctx, model.User{Username: "apale"})
+	user, err := GetUser(userCtx, model.User{Username: "apale"})
 	if err != nil {
 		logrus.Error(err)
 		t.FailNow()
@@ -26,7 +26,7 @@ func TestRegister(t *testing.T) {
 		Nickname:    "Apale",
 		PhoneNumber: "1234567890",
 	}
-	err := CreateUserWithExtra(ctx, user, extra)
+	err := CreateUserWithExtra(userCtx, user, extra)
 	if err != nil {
 		logrus.Error(err)
 		t.FailNow()
@@ -36,7 +36,7 @@ func TestRegister(t *testing.T) {
 func TestGetExtra(t *testing.T) {
 	user := model.User{}
 	user.ID = 1
-	extra, err := GetUserExtra(ctx, user)
+	extra, err := GetUserExtra(userCtx, user)
 	if err != nil {
 		logrus.Error(err)
 		t.FailNow()

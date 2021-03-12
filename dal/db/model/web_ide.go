@@ -75,8 +75,8 @@ type UserExtra struct {
 // UserGroup [...]
 type UserGroup struct {
 	gorm.Model
-	UserID  uint32 `gorm:"index:idx_user_id;column:user_id;type:int(11) unsigned;not null"` // user表的id
-	GroupID string `gorm:"index:idx_group_id;column:group_id;type:varchar(80);not null"`    // docker中的image_id
+	UserID  uint32 `gorm:"uniqueIndex:uniq_idx_user_group;index:idx_user_id;column:user_id;type:int(11) unsigned;not null"`   // user表的id
+	GroupID uint32 `gorm:"uniqueIndex:uniq_idx_user_group;index:idx_group_id;column:group_id;type:int(11) unsigned;not null"` // group表的id
 }
 
 // UserImage [...]
