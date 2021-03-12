@@ -31,7 +31,7 @@ func CreateUserWithExtra(ctx context.Context, user model.User, extra model.UserE
 			return errors.New("user_id is 0")
 		}
 		logrus.Infof("Create User: %+v", user)
-		extra.UserID = user.ID
+		extra.UserID = uint32(user.ID)
 		if err = tx.Model(&extra).Create(&extra).Error; err != nil {
 			err = ex_errors.Errorf("Create userExtra error: %v", err)
 			return
