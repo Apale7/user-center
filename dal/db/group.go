@@ -5,12 +5,15 @@ import (
 	"user_center/dal/db/model"
 )
 
-func CreateGroup(ctx context.Context, groupInfo model.Group) (group model.Group, err error) {
-	err = db.WithContext(ctx).Create(&groupInfo).Error
-	if err == nil && group.ID <= 0 {
+func CreateGroup(ctx context.Context, groupInfo model.Group) (model.Group, error) {
+	err := db.WithContext(ctx).Create(&groupInfo).Error
+	if err == nil && groupInfo.ID <= 0 {
 		panic("create group error")
 	}
-	return
+	if err != nil {
+		return model.Group{}, err
+	}
+	return groupInfo, nil
 }
 
 func GetGroup(ctx context.Context, groupReqParams model.Group) (group []model.Group, err error) {
@@ -46,4 +49,10 @@ func JoinGroup(ctx context.Context, ug model.UserGroup) (err error) {
 	db := db.WithContext(ctx)
 	err = db.Model(&model.UserGroup{}).Create(&ug).Error
 	return
+}
+
+func ExitGroup(ctx context.Context, ug model.UserGroup) (err error) {
+	db := db.WithContext(ctx)
+	err = db.Model(&model.UserGroup{}).Where(&ug).Delete(&ug).Error
+	return err
 }

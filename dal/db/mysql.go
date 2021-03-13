@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
@@ -47,8 +46,8 @@ func getDbConf() mysqlConf {
 	viper.SetConfigName("db_conf")
 	viper.AddConfigPath("./config")
 	if os.Getenv("ENV") == "dev" {
-		logrus.Infoln("running in dev environment...")
-		viper.AddConfigPath("/root/Code/user-center/config")
+		log.Infoln("running in dev environment...")
+		viper.AddConfigPath(os.Getenv("CODE") + "/user-center/config")
 	}
 	if err = viper.ReadInConfig(); err != nil {
 		log.Error(errors.WithStack(err))
