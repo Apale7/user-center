@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	addr = "localhost:8888"
+	addr = "localhost:9999"
 )
 
 var (
