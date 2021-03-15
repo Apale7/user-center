@@ -53,6 +53,6 @@ func JoinGroup(ctx context.Context, ug model.UserGroup) (err error) {
 
 func ExitGroup(ctx context.Context, ug model.UserGroup) (err error) {
 	db := db.WithContext(ctx)
-	err = db.Model(&model.UserGroup{}).Where(&ug).Delete(&ug).Error
+	err = db.Unscoped().Model(&model.UserGroup{}).Where(&ug).Delete(&ug).Error
 	return err
 }

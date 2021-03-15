@@ -10,14 +10,14 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var ctx = context.Background()
+var userCtx = context.Background()
 
 func TestLogin(t *testing.T) {
 	req := &user_center.LoginRequest{
 		Username: "apale",
 		Password: "123465",
 	}
-	resp, err := Login(ctx, req)
+	resp, err := Login(userCtx, req)
 	if err != nil {
 		logrus.Errorln(err)
 		t.FailNow()
