@@ -7,7 +7,6 @@ import (
 	db_model "user_center/dal/db/model"
 	"user_center/model"
 
-	"github.com/Apale7/common/constdef"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -20,19 +19,20 @@ const (
 )
 
 var (
-	secret string
+	accessSecret  string
+	refreshSecret string
 )
 
 func init() {
 
-	secret = getJWTConf()
-	logrus.Info(secret)
+	accessSecret, refreshSecret = getJWTConf()
+	logrus.Info(accessSecret)
 	if os.Getenv("ENV") == "dev" {
-		secret = "123456"
+		accessSecret = "123456"
 	}
 }
 
-func getJWTConf() string {
+func getJWTConf() (accessKey, refreshKey string) {
 	viper.SetConfigName("jwt_conf")
 	viper.AddConfigPath("./config")
 	if err := viper.ReadInConfig(); err != nil {
@@ -40,11 +40,11 @@ func getJWTConf() string {
 		panic("viper readInConfig error")
 	}
 
-	return viper.GetString(constdef.UserCenterSecretKey)
+	return viper.GetString("accessKey"), viper.GetString("refreshKey")
 }
 
 // createToken create token with uid and extra, expires after timeLength seconds.
-func createToken(userID uint, userExtra db_model.UserExtra, timeLength int) (tokenString string, exp int64, err error) {
+func createToken(userID uint, userExtra db_model.UserExtra, timeLength int, key string) (tokenString string, exp int64, err error) {
 	customClaims := model.CustomClaims{
 		UserID: userID,
 		Extra:  userExtra,
@@ -55,7 +55,7 @@ func createToken(userID uint, userExtra db_model.UserExtra, timeLength int) (tok
 	}
 	exp = customClaims.ExpiresAt
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, customClaims)
-	tokenString, err = token.SignedString([]byte(secret))
+	tokenString, err = token.SignedString([]byte(key))
 	if err != nil {
 		return
 	}
@@ -63,19 +63,19 @@ func createToken(userID uint, userExtra db_model.UserExtra, timeLength int) (tok
 }
 
 func CreateAccessToken(userID uint, userExtra db_model.UserExtra) (tokenString string, exp int64, err error) {
-	return createToken(userID, userExtra, accessMaxAge)
+	return createToken(userID, userExtra, accessMaxAge, accessSecret)
 }
 
 func CreateRefreshToken(userID uint, userExtra db_model.UserExtra) (tokenString string, exp int64, err error) {
-	return createToken(userID, userExtra, refreshMaxAge)
+	return createToken(userID, userExtra, refreshMaxAge, refreshSecret)
 }
 
 func ParseToken(tokenString string) (model.CustomClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &model.CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+			return nil, errors.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(secret), nil
+		return []byte(accessSecret), nil
 	})
 	if err != nil {
 		return model.CustomClaims{}, err
