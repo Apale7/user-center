@@ -14,7 +14,7 @@ import (
 )
 
 func Register(ctx context.Context, req *user_center.RegisterRequest) (resp *user_center.RegisterResponse, err error) {
-	err = db.CreateUserWithExtra(ctx, dto.RPCUser2ModelUser(req.User), model.UserExtra{})
+	err = db.CreateUserWithExtra(ctx, *dto.RPCUser2ModelUser(req.User), *dto.RpcUserExtra2ModelUserExtra(req.UserExtra))
 	if err != nil {
 		return
 	}

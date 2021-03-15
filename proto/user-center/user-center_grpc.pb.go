@@ -146,7 +146,6 @@ type UserCenterServer interface {
 	GetGroupMembers(context.Context, *GetGroupMembersRequest) (*GetGroupMembersResponse, error)
 	JoinGroup(context.Context, *JoinGroupRequest) (*JoinGroupResponse, error)
 	ExitGroup(context.Context, *ExitGroupRequest) (*ExitGroupResponse, error)
-	mustEmbedUnimplementedUserCenterServer()
 }
 
 // UnimplementedUserCenterServer must be embedded to have forward compatible implementations.

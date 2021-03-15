@@ -3,7 +3,7 @@ module user_center
 go 1.16
 
 require (
-	github.com/Apale7/common v0.0.0-20210228081448-ed0e6f253949
+	github.com/Apale7/common v0.0.0-20210308162803-e00f136046d7
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/golang/protobuf v1.4.3
@@ -17,7 +17,6 @@ require (
 	golang.org/x/text v0.3.5 // indirect
 	google.golang.org/genproto v0.0.0-20210204154452-deb828366460 // indirect
 	google.golang.org/grpc v1.35.0
-	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0 // indirect
 	google.golang.org/protobuf v1.25.0
 	gorm.io/driver/mysql v1.0.4
 	gorm.io/gorm v1.20.12

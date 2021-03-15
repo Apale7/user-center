@@ -7,8 +7,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func RPCUser2ModelUser(user *user_center.User) model.User {
-	return model.User{
+func RPCUser2ModelUser(user *user_center.User) *model.User {
+	return &model.User{
 		Username: user.Username,
 		Password: user.Password,
 		Model: gorm.Model{
@@ -17,10 +17,32 @@ func RPCUser2ModelUser(user *user_center.User) model.User {
 	}
 }
 
-func ModelUser2RPCUser(user *model.User) user_center.User {
-	return user_center.User{
+func ModelUser2RPCUser(user *model.User) *user_center.User {
+	return &user_center.User{
 		Id:       int32(user.ID),
 		Username: user.Username,
 		Password: user.Password,
+	}
+}
+
+func RpcUserExtra2ModelUserExtra(extra *user_center.UserExtra) *model.UserExtra {
+	return &model.UserExtra{
+		Model:       gorm.Model{ID: uint(extra.Id)},
+		UserID:      uint32(extra.UserId),
+		Nickname:    extra.Nickname,
+		PhoneNumber: extra.PhoneNumber,
+		Email:       extra.Email,
+		AvatarURL:   extra.AvatarUrl,
+	}
+}
+
+func ModelUserExtra2RPCUserExtra(extra *model.UserExtra) *user_center.UserExtra {
+	return &user_center.UserExtra{
+		Id:          int32(extra.ID),
+		UserId:      int32(extra.UserID),
+		Nickname:    extra.Nickname,
+		PhoneNumber: extra.PhoneNumber,
+		Email:       extra.Email,
+		AvatarUrl:   extra.AvatarURL,
 	}
 }
