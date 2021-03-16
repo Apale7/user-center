@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	accessMaxAge  = 30
+	accessMaxAge  = 100
 	refreshMaxAge = 60 * 60 * 24 * 7
 )
 

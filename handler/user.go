@@ -49,6 +49,9 @@ func Login(ctx context.Context, req *user_center.LoginRequest) (resp *user_cente
 }
 
 func CheckToken(ctx context.Context, req *user_center.CheckTokenRequest) (resp *user_center.CheckTokenResponse, err error) {
+	logrus.Infoln(req.Token)
+	logrus.Infoln(req.GetIsRefresh())
+
 	claims, err := service.ParseToken(req.Token, req.GetIsRefresh())
 	if err != nil {
 		logrus.Errorln(err)
@@ -58,6 +61,7 @@ func CheckToken(ctx context.Context, req *user_center.CheckTokenRequest) (resp *
 	resp = &user_center.CheckTokenResponse{
 		BaseResp: &base.BaseResp{StatusCode: 0},
 	}
+	err = claims.Valid()
 	return
 }
 
