@@ -24,7 +24,7 @@ func TestLogin(t *testing.T) {
 	}
 	fmt.Printf("%+v\n", resp)
 
-	claims, err := service.ParseToken(resp.AccessToken)
+	claims, err := service.ParseToken(resp.AccessToken, false)
 	if err != nil {
 		logrus.Errorln(err)
 		t.FailNow()

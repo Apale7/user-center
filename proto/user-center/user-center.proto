@@ -65,7 +65,8 @@ message DeleteResponse
 
 message CheckTokenRequest {
     string token = 1;
-
+    bool isRefresh = 2;
+    
     base.Base base = 255;
 }
 

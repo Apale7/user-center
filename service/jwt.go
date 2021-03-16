@@ -70,12 +70,18 @@ func CreateRefreshToken(userID uint, userExtra db_model.UserExtra) (tokenString 
 	return createToken(userID, userExtra, refreshMaxAge, refreshSecret)
 }
 
-func ParseToken(tokenString string) (model.CustomClaims, error) {
+func ParseToken(tokenString string, isRefresh bool) (model.CustomClaims, error) {
+	var key string
+	if isRefresh {
+		key = refreshSecret
+	} else {
+		key = accessSecret
+	}
 	token, err := jwt.ParseWithClaims(tokenString, &model.CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(accessSecret), nil
+		return []byte(key), nil
 	})
 	if err != nil {
 		return model.CustomClaims{}, err
