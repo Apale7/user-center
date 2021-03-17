@@ -16,18 +16,24 @@ func CreateGroup(ctx context.Context, groupInfo model.Group) (model.Group, error
 	return groupInfo, nil
 }
 
-func GetGroup(ctx context.Context, groupReqParams model.Group) (group []model.Group, err error) {
-	db := db.WithContext(ctx).Model(&model.Group{}).Select("id, owner_id, group_name, created_at")
-	if groupReqParams.ID > 0 {
-		db = db.Where("id = ?", groupReqParams.ID)
+func GetGroup(ctx context.Context, groupInfo model.Group, memberID uint32) (group []model.Group, err error) {
+	mainDB := db.WithContext(ctx).Model(&model.Group{}).Select("id, owner_id, group_name, created_at")
+	if groupInfo.ID > 0 {
+		mainDB = mainDB.Where("id = ?", groupInfo.ID)
 	}
-	if groupReqParams.OwnerID > 0 {
-		db = db.Where("owner_id = ?", groupReqParams.OwnerID)
+	if groupInfo.OwnerID > 0 {
+		mainDB = mainDB.Where("owner_id = ?", groupInfo.OwnerID)
 	}
-	if len(groupReqParams.GroupName) > 0 {
-		db = db.Where("group_name like ?", groupReqParams.GroupName+"%")
+	if memberID > 0 {
+		var groupIDs []uint32
+		subDB := db.WithContext(ctx).Model(&model.UserGroup{})
+		subDB.Select("group_id").Where("user_id=?", memberID).Pluck("group_id", &groupIDs)
+		mainDB = mainDB.Where("group_id in ?", groupIDs)
 	}
-	err = db.Find(&group).Error
+	if len(groupInfo.GroupName) > 0 {
+		mainDB = mainDB.Where("group_name like ?", groupInfo.GroupName+"%")
+	}
+	err = mainDB.Find(&group).Error
 	return
 }
 

@@ -147,7 +147,7 @@ message ExitGroupResponse {
 
 message GetGroupRequest {
     Group group_info = 1;
-
+    uint32 member_id = 2;
     base.Base base = 255;
 }
 

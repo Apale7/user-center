@@ -29,7 +29,7 @@ func TestGetGroupMembers(t *testing.T) {
 }
 
 func TestGetGroup(t *testing.T) {
-	g, err := GetGroup(ctx, model.Group{Model: gorm.Model{ID: 2}})
+	g, err := GetGroup(ctx, model.Group{Model: gorm.Model{ID: 2}}, 1)
 	if err != nil {
 		logrus.Errorln(err)
 		t.FailNow()

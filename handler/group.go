@@ -38,7 +38,7 @@ func checkGroupInfo(req *user_center.CreateGroupRequest) bool {
 
 func GetGroup(ctx context.Context, req *user_center.GetGroupRequest) (resp *user_center.GetGroupResponse, err error) {
 	resp = &user_center.GetGroupResponse{}
-	groups, err := db.GetGroup(ctx, *dto.ToModelGroup(req.GroupInfo))
+	groups, err := db.GetGroup(ctx, *dto.ToModelGroup(req.GroupInfo), req.MemberId)
 	if err != nil {
 		return
 	}
