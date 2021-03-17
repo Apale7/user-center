@@ -82,3 +82,13 @@ func Refresh(ctx context.Context, req *user_center.RefreshRequest) (resp *user_c
 	resp = &user_center.RefreshResponse{AccessToken: accessToken, RefreshToken: refreshToken, AccessExp: accessExp, RefreshExp: refreshExp}
 	return
 }
+
+func GetUserInfo(ctx context.Context, req *user_center.GetUserInfoRequest) (resp *user_center.GetUserInfoResponse, err error) {
+	resp = &user_center.GetUserInfoResponse{}
+	userInfo, err := db.GetUserInfo(ctx, req.UserId, req.Username)
+	if err != nil {
+		return
+	}
+	resp.UserInfo = dto.ModelUserExtra2RPCUserExtra(userInfo)
+	return
+}

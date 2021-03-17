@@ -28,7 +28,7 @@ func GetGroup(ctx context.Context, groupInfo model.Group, memberID uint32) (grou
 		var groupIDs []uint32
 		subDB := db.WithContext(ctx).Model(&model.UserGroup{})
 		subDB.Select("group_id").Where("user_id=?", memberID).Pluck("group_id", &groupIDs)
-		mainDB = mainDB.Where("group_id in ?", groupIDs)
+		mainDB = mainDB.Where("id in ?", groupIDs)
 	}
 	if len(groupInfo.GroupName) > 0 {
 		mainDB = mainDB.Where("group_name like ?", groupInfo.GroupName+"%")

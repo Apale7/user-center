@@ -62,3 +62,8 @@ func (*UserCenterServer) ExitGroup(ctx context.Context, req *h.ExitGroupRequest)
 	fmt.Println("ExitGroup called")
 	return handler.ExitGroup(ctx, req)
 }
+
+func (*UserCenterServer) GetUserInfo(ctx context.Context, req *h.GetUserInfoRequest) (*h.GetUserInfoResponse, error) {
+	fmt.Println("GetUserInfo called")
+	return handler.GetUserInfo(ctx, req)
+}

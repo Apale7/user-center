@@ -56,3 +56,24 @@ func GetUserExtra(ctx context.Context, user model.User) (extra model.UserExtra, 
 	err = db.WithContext(ctx).Model(&extra).Where("user_id = ?", user.ID).First(&extra).Error
 	return
 }
+
+func GetUserInfo(ctx context.Context, userID uint32, username string) (userInfo *model.UserExtra, err error) {
+	userInfo = &model.UserExtra{}
+	db := db.WithContext(ctx)
+	if userID > 0 {
+		err = db.Model(&model.UserExtra{}).Where("user_id = ?", userID).First(&userInfo).Error
+	} else {
+		var user model.User
+		err = db.Model(&model.User{}).Select("id").Where("username = ?", username).First(&user).Error
+		if err != nil {
+			return
+		}
+
+		err = db.Model(&model.UserExtra{}).Where("user_id = ?", user.ID).First(&userInfo).Error
+	}
+
+	if err != nil {
+		err = ex_errors.WithStack(err)
+	}
+	return
+}

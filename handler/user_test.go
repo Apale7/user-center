@@ -64,3 +64,37 @@ func TestCheckToken(t *testing.T) {
 		})
 	}
 }
+
+func TestGetUserInfo(t *testing.T) {
+	type args struct {
+		ctx context.Context
+		req *user_center.GetUserInfoRequest
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantResp *user_center.GetUserInfoResponse
+		wantErr  bool
+	}{
+		{
+			name: "get apale",
+			args: args{ctx: ctx, req: &user_center.GetUserInfoRequest{
+				UserId: 1,
+			}},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			resp, err := GetUserInfo(tt.args.ctx, tt.args.req)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GetUserInfo() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			fmt.Printf("%+v", resp.UserInfo)
+			// if !reflect.DeepEqual(gotResp, tt.wantResp) {
+			// 	t.Errorf("GetUserInfo() = %v, want %v", gotResp, tt.wantResp)
+			// }
+		})
+	}
+}
