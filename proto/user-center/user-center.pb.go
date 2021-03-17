@@ -10,9 +10,9 @@ import (
 	proto "github.com/golang/protobuf/proto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	base "user_center/proto/base"
 	reflect "reflect"
 	sync "sync"
+	base "user_center/proto/base"
 )
 
 const (
