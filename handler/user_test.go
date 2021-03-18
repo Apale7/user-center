@@ -91,7 +91,7 @@ func TestGetUserInfo(t *testing.T) {
 				t.Errorf("GetUserInfo() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			fmt.Printf("%+v", resp.UserInfo)
+			fmt.Printf("%+v", resp)
 			// if !reflect.DeepEqual(gotResp, tt.wantResp) {
 			// 	t.Errorf("GetUserInfo() = %v, want %v", gotResp, tt.wantResp)
 			// }

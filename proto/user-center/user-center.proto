@@ -178,7 +178,8 @@ message GetUserInfoRequest {
 
 message GetUserInfoResponse {
     UserExtra user_info = 1;
-
+    string username = 2;
+    
     base.BaseResp base_resp = 255;
 }
 

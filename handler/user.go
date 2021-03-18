@@ -11,6 +11,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"gorm.io/gorm"
 )
 
 func Register(ctx context.Context, req *user_center.RegisterRequest) (resp *user_center.RegisterResponse, err error) {
@@ -90,5 +91,14 @@ func GetUserInfo(ctx context.Context, req *user_center.GetUserInfoRequest) (resp
 		return
 	}
 	resp.UserInfo = dto.ModelUserExtra2RPCUserExtra(userInfo)
+	if req.Username != "" {
+		resp.Username = req.Username
+	} else {
+		user, err := db.GetUser(ctx, model.User{Model: gorm.Model{ID: uint(req.UserId)}})
+		if err != nil {
+			return nil, errors.WithStack(err)
+		}
+		resp.Username = user.Username
+	}
 	return
 }

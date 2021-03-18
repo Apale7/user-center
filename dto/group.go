@@ -8,6 +8,9 @@ import (
 )
 
 func ToGRPCGroup(g *model.Group) *user_center.Group {
+	if g == nil {
+		return &user_center.Group{}
+	}
 	return &user_center.Group{
 		Id:        uint32(g.ID),
 		CreatedAt: uint64(g.CreatedAt.Local().Unix()),
@@ -18,6 +21,9 @@ func ToGRPCGroup(g *model.Group) *user_center.Group {
 }
 
 func ToModelGroup(g *user_center.Group) *model.Group { //写入数据时才会用ToModelGroup, time字段可以不转
+	if g == nil {
+		return &model.Group{}
+	}
 	return &model.Group{
 		Model: gorm.Model{
 			ID: uint(g.Id),
