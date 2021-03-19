@@ -45,7 +45,7 @@ func Login(ctx context.Context, req *user_center.LoginRequest) (resp *user_cente
 	if err != nil {
 		return nil, errors.Errorf("create refreshToken error, err: %+v", err)
 	}
-	resp = &user_center.LoginResponse{AccessToken: accessToken, RefreshToken: refreshToken, AccessExp: accessExp, RefreshExp: refreshExp}
+	resp = &user_center.LoginResponse{AccessToken: accessToken, RefreshToken: refreshToken, AccessExp: accessExp, RefreshExp: refreshExp, UserId: uint32(user.ID)}
 	return
 }
 

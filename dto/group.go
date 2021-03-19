@@ -13,8 +13,8 @@ func ToGRPCGroup(g *model.Group) *user_center.Group {
 	}
 	return &user_center.Group{
 		Id:        uint32(g.ID),
-		CreatedAt: uint64(g.CreatedAt.Local().Unix()),
-		UpdatedAt: uint64(g.UpdatedAt.Local().Unix()),
+		CreatedAt: g.CreatedAt.Local().Unix(),
+		UpdatedAt: g.UpdatedAt.Local().Unix(),
 		OwnerId:   g.OwnerID,
 		GroupName: g.GroupName,
 	}
