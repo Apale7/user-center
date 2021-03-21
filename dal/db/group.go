@@ -16,7 +16,8 @@ func CreateGroup(ctx context.Context, groupInfo model.Group) (model.Group, error
 	return groupInfo, nil
 }
 
-func GetGroup(ctx context.Context, groupInfo model.Group, memberID uint32) (group []model.Group, err error) {
+// haveMe 为false时返回不包括memberID的group，用于加入团队
+func GetGroup(ctx context.Context, groupInfo model.Group, memberID uint32, haveMe bool) (group []model.Group, err error) {
 	mainDB := db.WithContext(ctx).Model(&model.Group{}).Select("id, owner_id, group_name, created_at")
 	if groupInfo.ID > 0 {
 		mainDB = mainDB.Where("id = ?", groupInfo.ID)
@@ -28,7 +29,11 @@ func GetGroup(ctx context.Context, groupInfo model.Group, memberID uint32) (grou
 		var groupIDs []uint32
 		subDB := db.WithContext(ctx).Model(&model.UserGroup{})
 		subDB.Select("group_id").Where("user_id=?", memberID).Pluck("group_id", &groupIDs)
-		mainDB = mainDB.Where("id in ?", groupIDs)
+		if haveMe {
+			mainDB = mainDB.Where("id in ?", groupIDs)
+		} else {
+			mainDB = mainDB.Where("id not in ?", groupIDs)
+		}
 	}
 	if len(groupInfo.GroupName) > 0 {
 		mainDB = mainDB.Where("group_name like ?", groupInfo.GroupName+"%")

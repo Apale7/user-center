@@ -5,6 +5,7 @@ import (
 	"user_center/dal/db"
 	"user_center/dal/db/model"
 	"user_center/dto"
+	"user_center/proto/base"
 	user_center "user_center/proto/user-center"
 
 	"github.com/Apale7/common/constdef"
@@ -14,7 +15,7 @@ func CreateGroup(ctx context.Context, req *user_center.CreateGroupRequest) (resp
 	if !checkGroupInfo(req) {
 		return nil, constdef.ErrInvalidParams
 	}
-	resp = &user_center.CreateGroupResponse{}
+	resp = &user_center.CreateGroupResponse{BaseResp: &base.BaseResp{}}
 	group, err := db.CreateGroup(ctx, model.Group{OwnerID: req.OwnerId, GroupName: req.GetGroupName()})
 	if err != nil {
 		return
@@ -38,7 +39,7 @@ func checkGroupInfo(req *user_center.CreateGroupRequest) bool {
 
 func GetGroup(ctx context.Context, req *user_center.GetGroupRequest) (resp *user_center.GetGroupResponse, err error) {
 	resp = &user_center.GetGroupResponse{}
-	groups, err := db.GetGroup(ctx, *dto.ToModelGroup(req.GroupInfo), req.MemberId)
+	groups, err := db.GetGroup(ctx, *dto.ToModelGroup(req.GroupInfo), req.MemberId, req.HaveMe)
 	if err != nil {
 		return
 	}
@@ -49,7 +50,7 @@ func GetGroup(ctx context.Context, req *user_center.GetGroupRequest) (resp *user
 	return
 }
 func GetGroupMembers(ctx context.Context, req *user_center.GetGroupMembersRequest) (resp *user_center.GetGroupMembersResponse, err error) {
-	resp = &user_center.GetGroupMembersResponse{}
+	resp = &user_center.GetGroupMembersResponse{BaseResp: &base.BaseResp{}}
 	members, err := db.GetGroupMembers(ctx, uint(req.GroupId))
 	if err != nil {
 		return
@@ -62,6 +63,7 @@ func GetGroupMembers(ctx context.Context, req *user_center.GetGroupMembersReques
 }
 func JoinGroup(ctx context.Context, req *user_center.JoinGroupRequest) (resp *user_center.JoinGroupResponse, err error) {
 	err = db.JoinGroup(ctx, model.UserGroup{UserID: req.UserId, GroupID: req.GroupId})
+	resp = &user_center.JoinGroupResponse{BaseResp: &base.BaseResp{}}
 	return
 }
 func ExitGroup(ctx context.Context, req *user_center.ExitGroupRequest) (resp *user_center.ExitGroupResponse, err error) {
