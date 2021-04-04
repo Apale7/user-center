@@ -84,12 +84,12 @@ func ParseToken(tokenString string, isRefresh bool) (model.CustomClaims, error) 
 		return []byte(key), nil
 	})
 	if err != nil {
-		return model.CustomClaims{}, err
+		return model.CustomClaims{}, errors.WithStack(err)
 	}
 	if claims, ok := token.Claims.(model.CustomClaims); ok && token.Valid {
 		return claims, nil
 	} else {
 		fmt.Printf("%+v", claims)
-		return model.CustomClaims{}, err
+		return model.CustomClaims{}, errors.WithStack(err)
 	}
 }

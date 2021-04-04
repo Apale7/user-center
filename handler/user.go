@@ -63,6 +63,12 @@ func CheckToken(ctx context.Context, req *user_center.CheckTokenRequest) (resp *
 		BaseResp: &base.BaseResp{StatusCode: 0},
 	}
 	err = claims.Valid()
+	if err != nil {
+		logrus.Errorln(err)
+		return
+	} else {
+		logrus.Infoln("CheckToken Successed")
+	}
 	return
 }
 

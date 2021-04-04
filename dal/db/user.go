@@ -12,7 +12,8 @@ import (
 
 func GetUser(ctx context.Context, user model.User) (res model.User, err error) {
 	logrus.Info(user.Username)
-	err = db.WithContext(ctx).Model(&user).Where(&user).Take(&res).Error
+	db := db.WithContext(ctx)
+	err = db.Model(&user).Where(&user).Take(&res).Error
 	return
 }
 
