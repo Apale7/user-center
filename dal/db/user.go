@@ -19,7 +19,7 @@ func GetUser(ctx context.Context, user model.User) (res model.User, err error) {
 
 func CreateUserWithExtra(ctx context.Context, user model.User, extra model.UserExtra) (err error) {
 	err = db.WithContext(ctx).Transaction(func(tx *gorm.DB) (err error) {
-		result := tx.Model(&user).FirstOrCreate(&user)
+		result := tx.Model(&user).FirstOrCreate(&user, user)
 		if err = result.Error; err != nil {
 			err = ex_errors.Errorf("Create user error: %v", err)
 			return
