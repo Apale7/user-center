@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"net"
+	"os"
 
 	h "user_center/proto/user-center"
 
@@ -10,15 +11,12 @@ import (
 	"google.golang.org/grpc"
 )
 
-const (
-	addr = ":9999"
-)
-
 var (
 	conn   *grpc.ClientConn
 	ctx    context.Context
 	cancel context.CancelFunc
 	err    error
+	addr   = ":9999"
 )
 
 func main() {
@@ -34,4 +32,11 @@ func main() {
 	h.RegisterUserCenterServer(server, &UserCenterServer{})
 	logrus.Infof("server listen at %s", lis.Addr().String())
 	server.Serve(lis)
+}
+
+func init() {
+	tmpAddr := os.Getenv("user_center_addr")
+	if tmpAddr != "" {
+		addr = tmpAddr
+	}
 }
