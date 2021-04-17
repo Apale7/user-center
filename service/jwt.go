@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"os"
 	"time"
 	db_model "user_center/dal/db/model"
@@ -84,12 +83,14 @@ func ParseToken(tokenString string, isRefresh bool) (model.CustomClaims, error) 
 		return []byte(key), nil
 	})
 	if err != nil {
+		logrus.Warnf(tokenString)
 		return model.CustomClaims{}, errors.WithStack(err)
 	}
-	if claims, ok := token.Claims.(model.CustomClaims); ok && token.Valid {
-		return claims, nil
+	if claims, ok := token.Claims.(*model.CustomClaims); ok && token.Valid {
+		return *claims, nil
 	} else {
-		fmt.Printf("%+v", claims)
-		return model.CustomClaims{}, errors.WithStack(err)
+		logrus.Infof("%+v", token.Claims)
+		logrus.Warnf("%+v", token.Valid)
+		return model.CustomClaims{}, errors.WithStack(errors.New("invalid calims or token"))
 	}
 }
