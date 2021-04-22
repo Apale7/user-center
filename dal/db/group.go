@@ -25,16 +25,18 @@ func GetGroup(ctx context.Context, groupInfo model.Group, memberID uint32, haveM
 	if groupInfo.OwnerID > 0 {
 		mainDB = mainDB.Where("owner_id = ?", groupInfo.OwnerID)
 	}
-	if memberID > 0 {
+	if memberID > 0 { //传了memberID则按member所在的group进行查询
 		var groupIDs []uint32
 		subDB := db.WithContext(ctx).Model(&model.UserGroup{})
-		subDB.Select("group_id").Where("user_id=?", memberID).Pluck("group_id", &groupIDs)
+		subDB.Select("group_id").Where("user_id=?", memberID).Pluck("group_id", &groupIDs) //获取member所在的所有group
+
 		if haveMe {
 			mainDB = mainDB.Where("id in ?", groupIDs)
-		} else {
+		} else if len(groupIDs) > 0 {
 			mainDB = mainDB.Where("id not in ?", groupIDs)
 		}
 	}
+
 	if len(groupInfo.GroupName) > 0 {
 		mainDB = mainDB.Where("group_name like ?", groupInfo.GroupName+"%")
 	}
