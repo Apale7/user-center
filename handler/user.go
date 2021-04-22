@@ -45,7 +45,14 @@ func Login(ctx context.Context, req *user_center.LoginRequest) (resp *user_cente
 	if err != nil {
 		return nil, errors.Errorf("create refreshToken error, err: %+v", err)
 	}
-	resp = &user_center.LoginResponse{AccessToken: accessToken, RefreshToken: refreshToken, AccessExp: accessExp, RefreshExp: refreshExp, UserId: uint32(user.ID)}
+
+	authList, err := db.GetAuthList(ctx, user.ID)
+	authList = append(authList, "login")
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	resp = &user_center.LoginResponse{AccessToken: accessToken, RefreshToken: refreshToken, AccessExp: accessExp, RefreshExp: refreshExp, UserId: uint32(user.ID), AuthList: authList}
 	return
 }
 

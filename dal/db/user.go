@@ -42,6 +42,11 @@ func CreateUserWithExtra(ctx context.Context, user model.User, extra model.UserE
 			return errors.New("user_extra_id is 0")
 		}
 
+		if err = tx.Model(&model.UserRole{}).Create(&model.UserRole{UserID: uint32(user.ID), RoleID: 1}).Error; err != nil { //默认角色为student
+			err = ex_errors.Errorf("Create user_role error: %v", err)
+			return
+		}
+
 		return
 	})
 	if err != nil {
