@@ -3,13 +3,14 @@ package service
 import (
 	"os"
 	"time"
+
+	config "user_center/config_loader"
 	db_model "user_center/dal/db/model"
 	"user_center/model"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 )
 
 const (
@@ -23,7 +24,6 @@ var (
 )
 
 func init() {
-
 	accessSecret, refreshSecret = getJWTConf()
 	logrus.Info(accessSecret)
 	if os.Getenv("ENV") == "dev" {
@@ -32,14 +32,7 @@ func init() {
 }
 
 func getJWTConf() (accessKey, refreshKey string) {
-	viper.SetConfigName("jwt_conf")
-	viper.AddConfigPath("./config")
-	if err := viper.ReadInConfig(); err != nil {
-		logrus.Error(errors.WithStack(err))
-		panic("viper readInConfig error")
-	}
-
-	return viper.GetString("accessKey"), viper.GetString("refreshKey")
+	return config.Get("accessKey"), config.Get("refreshKey")
 }
 
 // createToken create token with uid and extra, expires after timeLength seconds.

@@ -5,9 +5,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-var (
-	redisClient *redis.Client
-)
+var redisClient *redis.Client
 
 func init() {
 	if err := initClient(); err != nil {

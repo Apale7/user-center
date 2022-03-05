@@ -8,6 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// GetAuthList 获取一个用户所有的权限
 func GetAuthList(ctx context.Context, userID uint) (authList []string, err error) {
 	roleIDs, err := getRoles(ctx, userID)
 	if err != nil {
@@ -30,6 +31,7 @@ func GetAuthList(ctx context.Context, userID uint) (authList []string, err error
 	return
 }
 
+// getRoles 获取一个用户的所有角色
 func getRoles(ctx context.Context, userID uint) (roleIDs []uint, err error) {
 	db := db.WithContext(ctx)
 	err = db.Model(&model.UserRole{}).Select("role_id").Where("user_id = ?", userID).Pluck("role_id", &roleIDs).Error

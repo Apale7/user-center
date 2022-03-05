@@ -2,11 +2,11 @@ package db
 
 import (
 	"fmt"
-	"os"
 
-	"github.com/pkg/errors"
+	config "user_center/config_loader"
+	"user_center/dal/db/model"
+
 	log "github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
@@ -14,7 +14,7 @@ import (
 
 const (
 	// "user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
-	base = "%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local"
+	base = "%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local"
 )
 
 var (
@@ -22,52 +22,31 @@ var (
 	err error
 )
 
-func init() {
-	//获取dbconf
-	mysqlConf := getDbConf()
-	//构造dsn
-	dsn := fmt.Sprintf(base, mysqlConf.Username, mysqlConf.Password, mysqlConf.Host, mysqlConf.Port, mysqlConf.Dbname)
-	// log.Infoln(dsn)
-	//连接
-	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{SkipDefaultTransaction: true,
+func Init() {
+	// 获取dbconf
+	dsn := getDSN()
+	// 连接
+	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+		SkipDefaultTransaction: true, // 关闭默认事务提高性能
 		NamingStrategy: schema.NamingStrategy{
 			// TablePrefix:   "gormv2_",
 			SingularTable: true,
-		}}) //关闭默认事务提高性能
+		},
+	})
 	if err != nil {
 		panic(err)
 	}
 	db = db.Debug()
 	log.Info("mysql连接成功")
-	// db.AutoMigrate(&model.User{}, &model.UserExtra{}, &model.Resource{}, &model.Role{}, &model.UserContainer{}, &model.UserImage{}, &model.RoleResource{}, &model.UserRole{})
+	db.AutoMigrate(&model.User{}, &model.UserExtra{}, &model.Resource{}, &model.Role{}, &model.RoleResource{}, &model.UserRole{})
 }
 
-func getDbConf() mysqlConf {
-	viper.SetConfigName("db_conf")
-	viper.AddConfigPath("./config")
-	if os.Getenv("ENV") == "dev" {
-		log.Infoln("running in dev environment...")
-		viper.AddConfigPath(os.Getenv("CODE") + "/user-center/config")
-	}
-	if err = viper.ReadInConfig(); err != nil {
-		log.Error(errors.WithStack(err))
-		panic("viper readInConfig error")
-	}
-	var dbconf conf
-	if err = viper.Unmarshal(&dbconf); err != nil {
-		log.Error(errors.WithStack(err))
-		panic("viper Unmarshal error")
-	}
-	return dbconf.Mysql
-}
-
-type conf struct {
-	Mysql mysqlConf `json:"mysql"`
-}
-type mysqlConf struct {
-	Dbname   string `json:"dbname"`
-	Password string `json:"password"`
-	Host     string `json:"host"`
-	Port     int    `json:"port"`
-	Username string `json:"username"`
+func getDSN() string {
+	username := config.Get("mysql_user")
+	password := config.Get("mysql_pass")
+	host := config.Get("mysql_host")
+	port := config.Get("mysql_port")
+	dbname := config.Get("mysql_db")
+	dsn := fmt.Sprintf(base, username, password, host, port, dbname)
+	return dsn
 }
